@@ -2,9 +2,9 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>تسجيل الدخول إلى لوحة التحكم</title>
+  <title>تسجيل الدخول</title>
 
-  <!-- Supabase CDN -->
+  <!-- Supabase v2 -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
   <style>
@@ -14,13 +14,8 @@
       text-align: center;
       padding-top: 80px;
     }
-
-    h1 {
-      margin-bottom: 30px;
-    }
-
     button {
-      padding: 12px 20px;
+      padding: 14px 22px;
       font-size: 16px;
       cursor: pointer;
     }
@@ -31,36 +26,29 @@
 
   <h1>تسجيل الدخول إلى لوحة التحكم</h1>
 
-  <button onclick="loginWithGoogle()">
+  <button id="googleBtn">
     تسجيل الدخول عبر Google
   </button>
 
   <script>
-    // 🔑 بيانات Supabase (كما هي)
-    const SUPABASE_URL = "https://mcvutlmpzhuhtnnejqqm.supabase.co";
-    const SUPABASE_ANON_KEY =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jdnV0bG1wemh1aHRubmVqcXFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5ODkzNzgsImV4cCI6MjA4NDU2NTM3OH0.A1WHGXwRfOZRave6OVcebHa7mofLMN_bg3mqRLu34gA";
-
-    // إنشاء العميل
-    const supabase = supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
+    // ✅ أنشئ العميل باسم مختلف
+    const supabaseClient = window.supabase.createClient(
+      "https://mcvutlmpzhuhtnnejqqm.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jdnV0bG1wemh1aHRubmVqcXFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5ODkzNzgsImV4cCI6MjA4NDU2NTM3OH0.A1WHGXwRfOZRave6OVcebHa7mofLMN_bg3mqRLu34gA"
     );
 
-    // ✅ تسجيل الدخول الصحيح
-    async function loginWithGoogle() {
-      const { error } = await supabase.auth.signInWithOAuth({
+    document.getElementById("googleBtn").addEventListener("click", async () => {
+      const { error } = await supabaseClient.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo:
-            "https://alaa1ay.github.io/adoul-group-website/admin.html",
-        },
+          redirectTo: "https://alaa1ay.github.io/adoul-group-website/admin.html"
+        }
       });
 
       if (error) {
-        alert("خطأ في تسجيل الدخول: " + error.message);
+        alert(error.message);
       }
-    }
+    });
   </script>
 
 </body>
