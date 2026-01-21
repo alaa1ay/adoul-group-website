@@ -1,89 +1,62 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لوحة التحكم | Adoul Group</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js" defer></script>
+  <meta charset="UTF-8" />
+  <title>لوحة التحكم – Adoul Group</title>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f2ee;
+      padding: 40px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 16px;
+      cursor: pointer;
+    }
+  </style>
 </head>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const supabaseUrl = "https://mcvutlmpzhuhtnnejqqm.supabase.co";
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jdnV0bG1wemh1aHRubmVqcXFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5ODkzNzgsImV4cCI6MjA4NDU2NTM3OH0.A1WHGXwRfOZRave6OVcebHa7mofLMN_bg3mqRLu34gA";
-
-  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-</script>
-  <script>
-async function checkAuth() {
-  const { data: { session } } = await supabase.auth.getSession();
-
-  if (!session) {
-    window.location.href = "login.html";
-  }
-}
-checkAuth();
-</script>
-
 
 <body>
-  <nav>
-    <div class="logo">
-      <span>Adoul Group</span>
-      <img src="logo-circle.png" alt="شعار أدول جروب">
-    </div>
-    <div class="nav-links">
-      <a href="index.html">الرئيسية</a>
-      <a href="fabrics.html">الأقمشة</a>
-      <a href="request.html">اطلب تفصيل</a>
-      <a href="works.html">أعمالنا</a>
-      <a href="about.html">من نحن</a>
-      <a href="contact.html">تواصل معنا</a>
-      <a href="admin.html">لوحة التحكم</a>
-    </div>
-  </nav>
-  <section class="section">
-    <h2>لوحة التحكم</h2>
-    <div id="loginSection">
-      <p>أدخل كلمة المرور للوصول إلى لوحة التحكم:</p>
-      <input id="adminPassword" type="password" placeholder="كلمة المرور">
-      <button id="loginButton">دخول</button>
-    </div>
-    <div id="adminContent" style="display:none;">
-      <h3>إضافة قماش جديد</h3>
-      <form id="fabricForm">
-        <label for="fabricName">اسم القماش</label>
-        <input id="fabricName" type="text" required>
-        <label for="fabricCode">كود القماش (اختياري)</label>
-        <input id="fabricCode" type="text">
-        <label for="fabricType">نوع القماش</label>
-        <select id="fabricType">
-          <option value="كنب">كنب</option>
-          <option value="مجلس">مجلس</option>
-          <option value="ستارة">ستارة</option>
-          <option value="غرفة نوم">غرفة نوم</option>
-          <option value="أخرى">أخرى</option>
-        </select>
-        <label for="fabricNotes">ملاحظات</label>
-        <textarea id="fabricNotes" rows="2"></textarea>
-        <label for="fabricImage">صورة القماش</label>
-        <input id="fabricImage" type="file" accept="image/*" required>
-        <button type="submit">حفظ القماش</button>
-      </form>
-      <h3>إضافة عمل منفذ</h3>
-      <form id="workForm">
-        <label for="workTitle">عنوان العمل</label>
-        <input id="workTitle" type="text" required>
-        <label for="workDescription">وصف قصير</label>
-        <textarea id="workDescription" rows="2"></textarea>
-        <label for="workImage">صورة العمل</label>
-        <input id="workImage" type="file" accept="image/*" required>
-        <button type="submit">حفظ العمل</button>
-      </form>
-    </div>
-  </section>
-  <footer>
-    © 2026 Adoul Group – جميع الحقوق محفوظة
-  </footer>
+
+  <h1>لوحة التحكم</h1>
+
+  <p id="userEmail"></p>
+
+  <button onclick="logout()">تسجيل الخروج</button>
+
+  <script>
+    const supabaseClient = window.supabase.createClient(
+      "https://mcvutlmpzhuhtnnejqqm.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jdnV0bG1wemh1aHRubmVqcXFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5ODkzNzgsImV4cCI6MjA4NDU2NTM3OH0.A1WHGXwRfOZRave6OVcebHa7mofLMN_bg3mqRLu34gA"
+    );
+
+    async function checkAuth() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+
+      if (!session) {
+        // ❌ مو مسجّل → رجعه على login
+        window.location.href = "login.html";
+        return;
+      }
+
+      // ✅ مسجّل دخول
+      document.getElementById("userEmail").innerText =
+        "أهلاً " + session.user.email;
+    }
+
+    async function logout() {
+      await supabaseClient.auth.signOut();
+      window.location.href = "login.html";
+    }
+
+    checkAuth();
+  </script>
+
 </body>
 </html>
