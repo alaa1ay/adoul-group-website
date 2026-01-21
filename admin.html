@@ -23,6 +23,21 @@
 </head>
 
 <body>
+  <hr>
+
+<h2>إضافة قماش جديد</h2>
+
+<input type="text" id="fabricName" placeholder="اسم القماش">
+<br><br>
+<input type="file" id="fabricImage">
+<br><br>
+<button onclick="addFabric()">إضافة</button>
+
+<hr>
+
+<h2>الأقمشة</h2>
+<div id="fabricsList"></div>
+
 
   <h1>لوحة التحكم</h1>
 
@@ -57,6 +72,82 @@
 
     checkAuth();
   </script>
+  <script>
+  async function addFabric() {
+    const name = document.getElementById("fabricName").value;
+    const fileInput = document.getElementById("fabricImage");
+    const file = fileInput.files[0];
+
+    if (!name || !file) {
+      alert("أدخل الاسم والصورة");
+      return;
+    }
+
+    const fileName = Date.now() + "-" + file.name;
+
+    // رفع الصورة
+    const { error: uploadError } = await supabaseClient
+      .storage
+      .from("images")
+      .upload("fabrics/" + fileName, file);
+
+    if (uploadError) {
+      alert(uploadError.message);
+      return;
+    }
+
+    // رابط الصورة
+    const { data } = supabaseClient
+      .storage
+      .from("images")
+      .getPublicUrl("fabrics/" + fileName);
+
+    // حفظ بالجدول
+    const { error } = await supabaseClient
+      .from("fabrics")
+      .insert([{ name, image: data.publicUrl }]);
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    document.getElementById("fabricName").value = "";
+    fileInput.value = "";
+
+    loadFabrics();
+  }
+
+  async function loadFabrics() {
+    const { data, error } = await supabaseClient
+      .from("fabrics")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) return;
+
+    const container = document.getElementById("fabricsList");
+    container.innerHTML = "";
+
+    data.forEach(item => {
+      container.innerHTML += `
+        <div style="margin-bottom:15px">
+          <img src="${item.image}" width="120"><br>
+          <strong>${item.name}</strong><br>
+          <button onclick="deleteFabric('${item.id}')">حذف</button>
+        </div>
+      `;
+    });
+  }
+
+  async function deleteFabric(id) {
+    await supabaseClient.from("fabrics").delete().eq("id", id);
+    loadFabrics();
+  }
+
+  loadFabrics();
+</script>
+
 
 </body>
 </html>
