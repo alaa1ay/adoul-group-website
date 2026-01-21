@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اطلب تفصيل | Adoul Group</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <span>Adoul Group</span>
+      <img src="logo-circle.png" alt="شعار أدول جروب">
+    </div>
+    <div class="nav-links">
+      <a href="index.html">الرئيسية</a>
+      <a href="fabrics.html">الأقمشة</a>
+      <a href="request.html">اطلب تفصيل</a>
+      <a href="works.html">أعمالنا</a>
+      <a href="about.html">من نحن</a>
+      <a href="contact.html">تواصل معنا</a>
+    </div>
+  </nav>
+  <section class="section">
+    <h2>اطلب تفصيل</h2>
+    <form id="requestForm">
+      <label for="requestItem">ما تريد تفصيله</label>
+      <select id="requestItem">
+        <option value="">اختر نوع التفصيل</option>
+        <option value="كنب">كنب</option>
+        <option value="مجلس">مجلس</option>
+        <option value="ستارة">ستارة</option>
+        <option value="غرفة نوم">غرفة نوم</option>
+        <option value="أخرى">أخرى</option>
+      </select>
+      <label for="requestFabric">اختر القماش</label>
+      <select id="requestFabric">
+        <!-- يُملأ من جافاسكريبت -->
+      </select>
+      <label for="requestDimensions">الأبعاد التقريبية (سم)</label>
+      <input id="requestDimensions" type="text" placeholder="مثال: 200×300">
+      <label for="requestCity">المدينة</label>
+      <input id="requestCity" type="text" placeholder="مثال: Palermo">
+      <label for="requestPhone">رقم الهاتف أو واتساب</label>
+      <input id="requestPhone" type="text" placeholder="مثال: 0930xxxxxx">
+      <button type="submit">إرسال الطلب</button>
+    </form>
+  </section>
+  <footer>
+    © 2026 Adoul Group – جميع الحقوق محفوظة
+  </footer>
+</body>
+</html>
