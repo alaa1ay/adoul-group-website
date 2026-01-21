@@ -7,6 +7,25 @@
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabaseUrl = "https://mcvutlmpzhuhtnnejqqm.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jdnV0bG1wemh1aHRubmVqcXFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5ODkzNzgsImV4cCI6MjA4NDU2NTM3OH0.A1WHGXwRfOZRave6OVcebHa7mofLMN_bg3mqRLu34gA";
+
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+</script>
+  <script>
+async function checkAuth() {
+  const { data: { session } } = await supabase.auth.getSession();
+
+  if (!session) {
+    window.location.href = "login.html";
+  }
+}
+checkAuth();
+</script>
+
+
 <body>
   <nav>
     <div class="logo">
